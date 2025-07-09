@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Doctor - Scan and View Document</title>
+</head>
+<body>
+  <h1>Scan and View Document</h1>
+  <input type="text" id="token" placeholder="Enter Access Token">
+  <input type="text" id="docId" placeholder="Enter Document ID">
+  <button onclick="scanDocument()">Scan & View</button>
+
+  <div id="result"></div>
+  <iframe id="pdfFrame" width="100%" height="600px" style="display:none;"></iframe>
+
+  <script src="{% static 'js/scan.js' %}"></script>
+</body>
+</html>
