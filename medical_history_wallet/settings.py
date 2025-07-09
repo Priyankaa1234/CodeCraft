@@ -42,7 +42,11 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'api',
     'corsheaders',
+    'tailwind',
+    'theme',
 ]
+
+TAILWIND_APP_NAME='theme'
 
 
 REST_FRAMEWORK = {
@@ -151,6 +155,9 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [ BASE_DIR / "backend" / "api" / "static" ,]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+
+NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
 
 AUTH_USER_MODEL = 'api.User'
 

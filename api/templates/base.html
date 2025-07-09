@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Medical Wallet{% endblock %}</title>
+  {% load static %}
+  <script src="https://cdn.tailwindcss.com"></script>
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-cover bg-center min-h-screen flex flex-col items-center justify-center p-4"
+      style="background-image: url('https://images.unsplash.com/photo-1588776814546-3b4d9d7b930f');">
+  <div class="bg-white bg-opacity-90 shadow-xl rounded-xl p-8 w-full max-w-xl">
+    {% block content %}{% endblock %}
+  </div>
+</body>
+</html>

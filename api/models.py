@@ -22,4 +22,5 @@ class Document(models.Model):
     qr_code = models.ImageField(upload_to='qrcodes/', blank=True, null=True) 
     
     def __str__(self):
-        return f"{self.type} - {self.patient.username} - {self.doc_uid}"
+        return f"{self.uploaded_by.username} -> {self.patient.username}: {self.file.name}"
+
