@@ -9,6 +9,10 @@ from .serializers import RegisterSerializer, DoctorDocumentUploadSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .utils import generate_qr_code
+from rest_framework.views import APIView
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404
 
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -38,9 +42,31 @@ class DoctorDocumentUploadView(generics.CreateAPIView):
         if uploader.role != 'doctor':
             raise PermissionError("Only doctors can upload documents.")
 
-        document = serializer.save(uploaded_by=uploader)
-
-        qr_path = generate_qr_code(str(document.doc_uid))
-        document.qr_code.name = qr_path.replace('/media/', '')  # Store relative path
+        document = serializer.save(uploaded_by=self.request.user)
+        doc_uid = document.doc_uid
+        qr_path = generate_qr_code(doc_uid)
+        document.qr_code = qr_path
         document.save()
+        
+class ScanDocumentView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, doc_uid):
+        user = request.user
+
+        # Ensure only doctors can scan documents
+        if user.role != 'doctor':
+            return Response({"error": "Only doctors can scan documents."}, status=status.HTTP_403_FORBIDDEN)
+
+        # Get the document or return 404
+        document = get_object_or_404(Document, doc_uid=doc_uid)
+        
+         # Check if this doctor uploaded the document
+        if document.uploaded_by != user:
+            return Response({"error": "Access denied. You did not upload this document."}, status=status.HTTP_403_FORBIDDEN)
+
+        # Serialize and return the document info
+        serializer = DoctorDocumentUploadSerializer(document)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 

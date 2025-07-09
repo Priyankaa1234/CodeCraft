@@ -28,9 +28,11 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 class DoctorDocumentUploadSerializer(serializers.ModelSerializer):
+    qr_code_url = serializers.SerializerMethodField()
+     
     class Meta:
         model = Document
-        fields = ['file', 'type', 'patient']
+        fields = ['file', 'type', 'patient','qr_code_url']
         
     def get_qr_code_url(self, obj):
         if obj.qr_code:
